@@ -1,26 +1,41 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <button @click="getList">Get list</button>
+    <CardVacancy
+      v-for="item in listVacancy" :key="item.slug"
+      :name="item.name"
+      :main_technologies="item.main_technologies"
+      :more_technologies="item.more_technologies"
+    />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import CardVacancy from '@/components/CardVacancy.vue'
 
 const url = 'https://newsite.softorium.pro/admin-area/api/visitor/vacancy/';
 
 export default {
   name: 'HomeView',
   components: {
-    HelloWorld
+    CardVacancy
+  },
+
+  data() {
+    return {
+      listVacancy: [],
+    }
+  },
+
+  mounted() {
+    this.getList();
   },
 
   methods: {
     getList() {
       this.axios.get(url).then((response) => {
+        this.listVacancy = response.data;
         console.log(response.data)
       })
     }
